@@ -6,6 +6,7 @@ var mongoose = require('mongoose')
 
 //Modals
 var Clothing = require('./clothing-model')
+var User = require('./user-model')
 
 //Express server setup
 var app = express()
@@ -73,6 +74,54 @@ router.put('/clothingItems/:id', (req, res)=>{
 
 router.delete('/clothingItems/:id', (req, res)=>{
     Clothing.deleteOne({id:req.params.id})
+    .then(()=>{
+        res.json('deleted');
+    })
+})
+
+//User Items CRUD==============================================
+router.get('/users', (req,res)=>{
+    User.find()
+    .populate('type')
+    .then((user)=>{
+        res.json(user)
+    })
+})
+
+router.get('/users/:id', (req, res)=>{
+    User.findOne({id:req.params.id})
+    .then((user)=>{
+        res.json(user)
+    })
+})
+
+router.post('/users', (req, res)=>{
+    var user = new User()
+    user.id = Date.now()
+
+    var data = req.body
+    console.log(data)
+    Object.assign(user, data)
+    user.save()
+    .then((user)=>{
+        res.json(user)
+    })
+})
+
+router.put('/users/:id', (req, res)=>{
+    User.findOne({id:req.params.id})
+    .then((user)=>{
+        var data = req.body
+        Object.assign(user, data)
+        return user.save()
+    })
+    .then((user)=>{
+        res.json(user)
+    })
+})
+
+router.delete('/users/:id', (req, res)=>{
+    User.deleteOne({id:req.params.id})
     .then(()=>{
         res.json('deleted');
     })
