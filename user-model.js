@@ -8,7 +8,8 @@ const UserSchema = new Schema(
         name: String,
         bio: String,
         location: String,
-        link: Number
+        link: Number,
+        dpUrl: String,
     },
     {
         timestamps: true,
