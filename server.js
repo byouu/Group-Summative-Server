@@ -6,7 +6,9 @@ var mongoose = require('mongoose')
 
 //Modals
 var Clothing = require('./clothing-model')
+var Type = require('./type-model')
 var User = require('./user-model')
+const { populate } = require('./type-model')
 
 //Express server setup
 var app = express()
@@ -35,6 +37,7 @@ router.get('/testing', (req, res)=>{
 router.get('/clothingItems', (req,res)=>{
     Clothing.find()
     .populate('type')
+    .populate('user')
     .then((clothingItems)=>{
         res.json(clothingItems)
     })
@@ -42,6 +45,8 @@ router.get('/clothingItems', (req,res)=>{
 
 router.get('/clothingItems/:id', (req, res)=>{
     Clothing.findOne({id:req.params.id})
+    .populate('type')
+    .populate('user')
     .then((project)=>{
         res.json(project)
     })
@@ -50,7 +55,6 @@ router.get('/clothingItems/:id', (req, res)=>{
 router.post('/clothingItems', (req, res)=>{
     var clothingItem = new Clothing()
     clothingItem.id = Date.now()
-
     var data = req.body
     console.log(data)
     Object.assign(clothingItem, data)
@@ -79,10 +83,57 @@ router.delete('/clothingItems/:id', (req, res)=>{
     })
 })
 
-//User Items CRUD==============================================
+//Types  CRUD==============================================
+router.get('/types', (req,res)=>{
+    Type.find()
+    .then((type)=>{
+        res.json(type)
+    })
+})
+
+router.get('/types/:id', (req, res)=>{
+    Type.findOne({id:req.params.id})
+    .populate('clothingItems')
+    .then((user)=>{
+        res.json(user)
+    })
+})
+
+router.post('/types', (req, res)=>{
+    var type = new Type()
+    type.id = Date.now()
+
+    var data = req.body
+    console.log(data)
+    Object.assign(type, data)
+    type.save()
+    .then((type)=>{
+        res.json(type)
+    })
+})
+
+router.put('/types/:id', (req, res)=>{
+    Type.findOne({id:req.params.id})
+    .then((type)=>{
+        var data = req.body
+        Object.assign(type, data)
+        return type.save()
+    })
+    .then((type)=>{
+        res.json(type)
+    })
+})
+
+router.delete('/types/:id', (req, res)=>{
+    Type.deleteOne({id:req.params.id})
+    .then(()=>{
+        res.json('deleted');
+    })
+})
+
+//Users CRUD==============================================
 router.get('/users', (req,res)=>{
     User.find()
-    .populate('type')
     .then((user)=>{
         res.json(user)
     })
@@ -131,5 +182,5 @@ router.delete('/users/:id', (req, res)=>{
 app.use('/api', router);
 
 //Launch backend into port
-const apiPort = 4000;;
+const apiPort = 4000;
 app.listen(apiPort, ()=> console.log('Listening on port '+apiPort));

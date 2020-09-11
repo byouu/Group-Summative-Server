@@ -11,9 +11,17 @@ const UserSchema = new Schema(
         link: Number
     },
     {
-        timestamps: true
+        timestamps: true,
+        toJSON: { virtuals: true }
     }
 )
+
+UserSchema.virtual('clothingItems', {
+  ref: 'Clothing', // The model to use
+  localField: 'id', 
+  foreignField: 'userId', 
+  justOne: false,
+})
 
 //Exporting Schema to modify with Node
 module.exports = mongoose.model('User', UserSchema)
