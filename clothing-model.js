@@ -7,6 +7,7 @@ const ClothingSchema = new Schema(
         id: Number,
         name: String,
         description: String,
+        shippingInfo: String,
         price: mongoose.Types.Decimal128,
         photoUrl: String,
         typeId: Number,
