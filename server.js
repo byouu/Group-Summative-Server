@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 app.use(logger('dev'))
 
 //Setup database connection
-var connectionString = 'mongodb+srv://alteradmin:alterpass@cluster1.hemds.mongodb.net/Alter?retryWrites=true&w=majority'
+var connectionString = 'mongodb+srv://alteradmin:alterpass@cluster1.hemds.mongodb.net/Stacy?retryWrites=true&w=majority'
 mongoose.connect(connectionString, {useNewUrlParser:true})
 var db = mongoose.connection
 db.once('open', () => console.log('Database connected'))
