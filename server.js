@@ -3,18 +3,20 @@ var bodyParser = require('body-parser')
 var logger = require('morgan')
 var cors = require('cors')
 var mongoose = require('mongoose')
+var fileUpload = require('express-fileupload')
 
 //Modals
 var Clothing = require('./clothing-model')
 var Type = require('./type-model')
 var User = require('./user-model')
-const { populate } = require('./type-model')
+// const { populate } = require('./type-model')
 
 //Express server setup
 var app = express()
 app.use(cors())
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(fileUpload())
 app.use(logger('dev'))
 
 //Setup database connection
@@ -175,6 +177,28 @@ router.delete('/users/:id', (req, res)=>{
     User.deleteOne({id:req.params.id})
     .then(()=>{
         res.json('deleted');
+    })
+})
+
+//User authentication =====================================
+router.post('users/authenticate', (req, res)=>{
+    var {username, password} = req.body;
+    var credential = {username, password}
+    User.findOne(credential)
+    .then((user)=>{
+        return res.json(user)
+    })
+})
+
+//File Upload =============================================
+router.post('/upload', (req, res)=>{
+    var files = Object.values(req.files)
+    var uploadedFile = files[0]
+
+    var newName = Date.now() + uploadedFile.name
+
+    uploadedFile.mv('public/'+newName, function(){
+        res.send(newName)
     })
 })
 
