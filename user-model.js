@@ -10,6 +10,10 @@ const UserSchema = new Schema(
         location: String,
         link: Number,
         dpUrl: String,
+        email: String,
+        username: String,
+        password: String,
+
     },
     {
         timestamps: true,
