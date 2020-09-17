@@ -17,6 +17,8 @@ app.use(cors())
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(fileUpload())
+
+app.use(express.static('public'))
 app.use(logger('dev'))
 
 //Setup database connection
@@ -181,13 +183,15 @@ router.delete('/users/:id', (req, res)=>{
 })
 
 //User authentication =====================================
-router.post('users/authenticate', (req, res)=>{
+router.post('/users/authenticate', (req, res)=>{
+
     var {username, password} = req.body;
     var credential = {username, password}
     User.findOne(credential)
     .then((user)=>{
         return res.json(user)
     })
+
 })
 
 //File Upload =============================================
