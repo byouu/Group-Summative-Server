@@ -17,10 +17,12 @@ app.use(cors())
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(fileUpload())
+
+app.use(express.static('public'))
 app.use(logger('dev'))
 
 //Setup database connection
-var connectionString = 'mongodb+srv://alteradmin:alterpass@cluster1.hemds.mongodb.net/Alter?retryWrites=true&w=majority'
+var connectionString = 'mongodb+srv://alteradmin:alterpass@cluster1.hemds.mongodb.net/AlterErica?retryWrites=true&w=majority'
 mongoose.connect(connectionString, {useNewUrlParser:true})
 var db = mongoose.connection
 db.once('open', () => console.log('Database connected'))
