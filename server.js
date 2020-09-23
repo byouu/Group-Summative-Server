@@ -181,9 +181,10 @@ router.delete('/users/:id', (req, res)=>{
 })
 
 //User authentication =====================================
-router.post('users/authenticate', (req, res)=>{
-    var {username, password} = req.body;
-    var credential = {username, password}
+router.post('/users/authenticate', (req, res)=>{
+    var {email, password} = req.body;
+    var credential = {email, password}
+    // console.log(res)
     User.findOne(credential)
     .then((user)=>{
         return res.json(user)
