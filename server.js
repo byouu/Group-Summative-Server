@@ -26,6 +26,7 @@ var db = mongoose.connection
 db.once('open', () => console.log('Database connected'))
 db.on('error', () => console.log('Database error'))
 
+app.use(express.static('public'))
 //Setup routes
 var router = express.Router();
 
